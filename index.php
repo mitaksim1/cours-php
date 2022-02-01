@@ -52,7 +52,12 @@ $products = $statement->fetchAll(PDO::FETCH_ASSOC);
             <td><?php echo $product['create_date'] ?></td>
             <td>
               <button type="button" class="btn btn-sm btn-outline-primary">Edit</button>
-              <button type="button" class="btn btn-sm btn-outline-danger">Delete</button>
+              <!-- Pour supprimer un produit de la bdd , c'est mieux d'utiliser la méthode POST, alors on change le bouton de <a> à <buuton> -->
+              <form style="display: inline-block;" action="delete.php" method="post">
+                <!-- On récupère l'id avec un input du type hidden -->
+                <input type="hidden" name="id" value="<?php echo $product['id'] ?>">
+                <button type="submit" class="btn btn-sm btn-outline-danger">Delete</button>
+            </form>
           </td>
         </tr>
         <?php endforeach ?>   
