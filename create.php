@@ -5,10 +5,6 @@ $pdo = new PDO('mysql:host=localhost;port=3306;dbname=products_crud', 'mimi', 'M
 // Si problème avec la connexion, cette config va nous retourner un message d'erreur
 $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-echo '<pre>';
-var_dump($_FILES);
-echo '</pre>';
-
 // Pour capturer les erreurs, on crée une variable du type array qui va les stocker d'abord
 $errors = [];
 
@@ -49,11 +45,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       if ($image) {
         // Attribue un nom unique aux images
         $imagePath = 'images/' . 'uploads' . '/' . randomString(8) . '-' . $image['name'];
-        // echo '<pre>';
-        // var_dump($imagePath);
-        // echo '</pre>';
   
-        mkdir(dirname($imagePath));
+        // dirname($imagePath);
 
         move_uploaded_file($image['tmp_name'], $imagePath);
       }
@@ -69,6 +62,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       $statement->bindValue(':price', $price);
       $statement->bindValue(':date', $date);
       $statement->execute();
+
+      // Redirection après sauvegarde du produit dans la bdd
+      header('Location: index.php');
     }   
 }
 
