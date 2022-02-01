@@ -5,7 +5,18 @@ $pdo = new PDO('mysql:host=localhost;port=3306;dbname=products_crud', 'mimi', 'M
 // Si problème avec la connexion, cette config va nous retourner un message d'erreur
 $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-$statement = $pdo->prepare('SELECT * FROM products ORDER BY create_date DESC');
+// On vérifie s'il y a une recherche de faite grâce au contenu de la variable $_GET['search]
+$search = $_GET['search'] ?? '';
+
+if ($search) {
+  $statement = $pdo->prepare('SELECT * FROM products WHERE title LIKE :title ORDER BY create_date DESC');
+  // Cette notation avec %% permet de récupérer toutes les occurences avec le mot cherché
+  $statement->bindValue(':title', "%$search%");
+} else {
+  $statement = $pdo->prepare('SELECT * FROM products ORDER BY create_date DESC');
+}
+
+
 $statement->execute();
 $products = $statement->fetchAll(PDO::FETCH_ASSOC);
 
@@ -29,6 +40,14 @@ $products = $statement->fetchAll(PDO::FETCH_ASSOC);
     <p>
       <a href="create.php" class="btn btn-success">Create Product</a>
     </p>
+    <!-- BARRE DE RECHERCHE -->
+    <form action="">
+      <div class="input-group mb-3">
+        <input type="text" class="form-control" placeholder="Search product" name="search" value="<?php echo $search ?>">
+        <button class="btn btn-outline-secondary" type="submit" id="button-addon2">Search</button>
+      </div>
+    </form>
+    
     <table class="table">
       <thead>
         <tr>
