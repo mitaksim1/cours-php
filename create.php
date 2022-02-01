@@ -41,8 +41,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       // vérifie s'il existe une image dans la variable globale
       $image = $_FILES['image'] ?? null;
       $imagePath = '';
-
-      if ($image) {
+      // echo '<pre>';
+      // var_dump($image);
+      // echo '</pre>';
+      // exit;
+      // Pour éviter qu'un chemin soit sauvegardé dans la bdd sans qu'une image soit chargée il faut aussi vérifier si la clé tmp_name est rempli
+      if ($image && $image['tmp_name']) {
         // Attribue un nom unique aux images
         $imagePath = 'images/' . 'uploads' . '/' . randomString(8) . '-' . $image['name'];
   
