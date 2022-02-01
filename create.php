@@ -8,6 +8,11 @@ $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 // Pour capturer les erreurs, on crée une variable du type array qui va les stocker d'abord
 $errors = [];
 
+// Déclaration des variables pour éviter des erreurs à l'appel au niveau du HTML
+$title = '';
+$price = '';
+$description = '';
+
 // On récupère les informations passés dans le formulaire grâce à $_POST
 // On vérifie d'abord si les informations envoyées sont envoyées avec la méthode POST
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -31,7 +36,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       // On crée des variables pour plus de sécurité, ça empêche de recevoir des injections SQL
       $statement = $pdo->prepare("INSERT INTO products (title, image, description, price, create_date)
                                    VALUES (:title, :image, :description, :price, :date)");
-                                   
+
       // On précise à PDO à quoi correspondent les variables créées
       $statement->bindValue(':title', $title);
       $statement->bindValue(':image', '');
@@ -78,17 +83,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
           
           <div class="form-group mb-3">
             <label>Product Title</label>
-            <input type="text" name="title" class="form-control">
+            <input type="text" name="title" class="form-control" value="<?php echo $title ?>">
           </div>
           
           <div class="form-group mb-3">
             <label>Product Description</label>
-            <textarea type="text" name="description" class="form-control"></textarea>
+            <textarea type="text" name="description" class="form-control"><?php echo $description ?></textarea>
           </div>
 
           <div class="form-group mb-3">
             <label>Product Price</label>
-            <input type="number" name="price" step="0.1" class="form-control">
+            <input type="number" name="price" step="0.1" class="form-control" value="<?php echo $price ?>">
           </div>
 
           <button type="submit" class="btn btn-primary">Submit</button>
