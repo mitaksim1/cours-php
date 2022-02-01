@@ -5,6 +5,10 @@ $pdo = new PDO('mysql:host=localhost;port=3306;dbname=products_crud', 'mimi', 'M
 // Si problème avec la connexion, cette config va nous retourner un message d'erreur
 $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
+echo '<pre>';
+var_dump($_FILES);
+echo '</pre>';
+
 // Pour capturer les erreurs, on crée une variable du type array qui va les stocker d'abord
 $errors = [];
 
@@ -31,20 +35,54 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       $errors[] = 'Product price is required';
     }
 
+    // Création d'un dossier qui va stocker les images
+    if (!is_dir('images')) {
+      mkdir('images');
+    }
+
     // On n'enregistre les données que s'il n'y a pas des erreurs
     if (empty($errors)) {
+      // vérifie s'il existe une image dans la variable globale
+      $image = $_FILES['image'] ?? null;
+      $imagePath = '';
+
+      if ($image) {
+        // Attribue un nom unique aux images
+        $imagePath = 'images/' . 'uploads' . '/' . randomString(8) . '-' . $image['name'];
+        // echo '<pre>';
+        // var_dump($imagePath);
+        // echo '</pre>';
+  
+        mkdir(dirname($imagePath));
+
+        move_uploaded_file($image['tmp_name'], $imagePath);
+      }
+
       // On crée des variables pour plus de sécurité, ça empêche de recevoir des injections SQL
       $statement = $pdo->prepare("INSERT INTO products (title, image, description, price, create_date)
                                    VALUES (:title, :image, :description, :price, :date)");
 
       // On précise à PDO à quoi correspondent les variables créées
       $statement->bindValue(':title', $title);
-      $statement->bindValue(':image', '');
+      $statement->bindValue(':image', $imagePath);
       $statement->bindValue(':description', $description);
       $statement->bindValue(':price', $price);
       $statement->bindValue(':date', $date);
       $statement->execute();
-    }    
+    }   
+}
+
+// Génère une chaîne de caractères aléatoires pour donner un nom unique aux images
+function randomString($n)
+{
+  $characters = '0123456789abcdefghijklnopqrstuvxywzABCDEFGHIJKLMNOPQRSTUVXYWZ';
+  $str = '';
+
+  for ($i = 0; $i < $n; $i++) {
+    $index = rand(0, strlen($characters) - 1);
+    $str.= $characters[$index];
+  }
+  return $str;
 }
 ?>
 
@@ -73,8 +111,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
               <?php endforeach; ?>
             </div>
         <?php endif; ?>
-        
-        <form action="" method="post">
+        <!-- enctype: permet de charger des fichiers -->
+        <form action="" method="post" enctype="multipart/form-data">
           <div class="form-group mb-3">
             <label>Product Image</label>
             <br>
