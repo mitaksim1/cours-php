@@ -33,11 +33,10 @@ class Router
         }
 
         if ($fn) {
-            echo '<pre>';
-            var_dump($fn);
-            echo '</pre>';
+            // Execute la fonction lui passé en paramètre
+            call_user_func($fn);
         } else {
             echo "Page not found";
-        }
+        }    
     }
 }

@@ -9,7 +9,7 @@ use app\controllers\ProductController;
 
 $router = new Router();
 
-// si la route demandée est /, appeler la méthode index du controller ProductController
+// Si la route demandée est /, appeler la méthode index du controller ProductController
 $router->get('/', [ProductController::class, 'index']);
 $router->get('/products', [ProductController::class, 'index']);
 $router->get('/products/create', [ProductController::class, 'create']);
