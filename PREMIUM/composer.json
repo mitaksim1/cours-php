@@ -1,0 +1,15 @@
+{
+    "name": "mimi/premium",
+    "autoload": {
+        "psr-4": {
+            "app\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Mimi GIT",
+            "email": "miriamt.simonnet@gmail.com"
+        }
+    ],
+    "require": {}
+}
