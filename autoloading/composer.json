@@ -1,0 +1,17 @@
+{
+    "name": "mimi/autoloading",
+    "autoload": {
+        "psr-4": {
+            "app\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Mimi GIT",
+            "email": "miriamt.simonnet@gmail.com"
+        }
+    ],
+    "require": {
+        "guzzlehttp/guzzle": "^7.4"
+    }
+}
