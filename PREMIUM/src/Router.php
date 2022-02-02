@@ -16,6 +16,7 @@ class Router
         $this->postRoutes[$url] = $fn;
     }
 
+    // Retourne la page demandée
     public function resolve()
     {
         // S'il n'y aucun chemin dans la clé PATH_INFO, afficher route /
@@ -34,9 +35,24 @@ class Router
 
         if ($fn) {
             // Execute la fonction lui passé en paramètre
-            call_user_func($fn);
+            // $this : on passe l'objet Router comme paramètre à la fonction qui sera appelé par call_user_func
+            call_user_func($fn, $this);
         } else {
             echo "Page not found";
         }    
+    }
+
+    // Retourne la vue passée en paramètre
+    public function renderView($view) // products/index
+    {
+        // Save the content of an include or echo in the local buffer
+        ob_start();
+        // Inclut la vue passée en argument
+        include_once __DIR__."/views/$view.php";
+        // Return the output and clean the buffer
+        $content = ob_get_clean();
+        
+        // Affiche le contenu de $content dans la partie spécifée dans _layout.php
+        include_once __DIR__.'/views/_layout.php';
     }
 }

@@ -1,12 +1,15 @@
 <?php
 namespace app\controllers;
 
+use app\Router;
+
 class ProductController 
 {
     // Render the list of products
-    public function index()
+    // On a accès à Router grâce au deuxième paramètre passé à la fonction call_user_func dans Router.php
+    public function index(Router $router)
     {
-        echo "Index page";
+        $router->renderView('products/index');
     }
 
     public function create()
