@@ -2,6 +2,7 @@
 namespace app\controllers;
 
 use app\Router;
+use app\models\Product;
 
 class ProductController 
 {
@@ -25,9 +26,41 @@ class ProductController
         ]);
     }
 
-    public function create()
+    public function create(Router $router)
     {
-        echo "Create Page";
+        $errors = [];
+        $productData = [
+            'title' => '',
+            'description' => '',
+            'image' => '',
+            'price' => ''
+        ];
+
+        // Validation avant d'envoyer les données en bdd
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            // On récupère les valeurs passées au form grâce à la super global $_POST
+            $productData['title'] = $_POST['title'];
+            $productData['description'] = $_POST['description'];
+            // Pour éviter des erreurs on peut préciser le type de données attendues
+            $productData['price'] = (float)$_POST['price'];
+            $productData['imageFile'] = $_FILES['image'] ?? null;
+
+            // Instanciation du model Product
+            $product = new Product();
+            // On lui passe toutes les données récupérées avec la méthode load
+            $product->load($productData);
+            // save() : méthode à créer
+            $errors = $product->save();
+            if (empty($errors)) {
+                header('Location: /products');
+                exit;
+            }  
+        }
+       
+        $router->renderView('products/create', [
+            'product' => $productData,
+            'errors' => $errors
+        ]);
     }
 
     public function update()

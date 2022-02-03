@@ -1,7 +1,7 @@
 <h1>Products List</h1>
 
 <p>
-  <a href="create.php" class="btn btn-success">Create Product</a>
+  <a href="products/create" class="btn btn-success">Create Product</a>
 </p>
 
 <!-- BARRE DE RECHERCHE -->
@@ -29,7 +29,9 @@
       <tr>
         <th scope="row"><?php echo $i + 1 ?></th>
         <td>
-          <img class="thumb-image" src="/<?php echo $product['image'] ?>" alt="">
+          <?php if ($product['image']): ?>
+            <img class="thumb-image" src="/<?php echo $product['image'] ?>" alt="">
+          <?php endif; ?>
         </td>
         <td><?php echo $product['title'] ?></td>
         <td><?php echo $product['price'] ?></td>
