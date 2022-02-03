@@ -5,6 +5,13 @@ class Router
 {
     public array $getRoutes = [];
     public array $postRoutes = [];
+    public Database $db;
+
+    // On crée une instance de Database dès l'instanciation de Router
+    public function __construct()
+    {
+        $this->db = new Database();
+    }
 
     public function get($url, $fn)
     {
@@ -14,6 +21,13 @@ class Router
     public function post($url, $fn)
     {
         $this->postRoutes[$url] = $fn;
+    }
+
+    public function dump($value)
+    {
+        echo '<pre>';
+        var_dump($value);
+        echo '</pre>';
     }
 
     // Retourne la page demandée
@@ -43,8 +57,14 @@ class Router
     }
 
     // Retourne la vue passée en paramètre
-    public function renderView($view) // products/index
+    public function renderView($view, $params = []) // products/index
     {
+        foreach ($params as $key => $value) {
+            // $key = 'products'
+            // $$key = $value -> l'ajout du $ devant la variable $key transforme sa valeur string ('products') en une variable ($products)
+            // $products = $value 
+            $$key = $value;
+        }
         // Save the content of an include or echo in the local buffer
         ob_start();
         // Inclut la vue passée en argument
