@@ -35,6 +35,15 @@ class Database
 
     }
 
+    public function getProductById($id)
+    {
+      $statement = $this->pdo->prepare('SELECT * FROM products WHERE id = :id');
+      $statement->bindValue(':id', $id);
+      $statement->execute();
+      
+      return $statement->fetch(PDO::FETCH_ASSOC);
+    }
+
     public function createProduct(Product $product)
     {
       // On crée des variables pour plus de sécurité, ça empêche de recevoir des injections SQL
@@ -47,6 +56,27 @@ class Database
       $statement->bindValue(':description', $product->description);
       $statement->bindValue(':price', $product->price);
       $statement->bindValue(':date', date('Y-m-d H:i:s'));
+      $statement->execute();
+    }
+
+    public function updateProduct(Product $product)
+    {
+      // On crée des variables pour plus de sécurité, ça empêche de recevoir des injections SQL
+      $statement = $this->pdo->prepare("UPDATE products SET title = :title, image = :image, description = :description, price = :price WHERE id = :id");
+                                
+      // On précise à PDO à quoi correspondent les variables créées
+      $statement->bindValue(':title', $product->title);
+      $statement->bindValue(':image', $product->imagePath);
+      $statement->bindValue(':description', $product->description);
+      $statement->bindValue(':price', $product->price);
+      $statement->bindValue(':id', $product->id);
+      $statement->execute();
+    }
+
+    public function deleteProduct($id)
+    {
+      $statement = $this->pdo->prepare('DELETE FROM products WHERE id = :id');
+      $statement->bindValue(':id', $id);
       $statement->execute();
     }
 }

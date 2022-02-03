@@ -63,13 +63,53 @@ class ProductController
         ]);
     }
 
-    public function update()
+    public function update(Router $router)
     {
-        echo "Update page";
+        $id = $_GET['id'] ?? null;
+        if (!$id) {
+            header('Location: /products');
+            exit;
+        }
+
+        $errors = [];
+        $productData = $router->db->getProductById($id);
+
+        // Si la méthode envoyé est POST
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            // On veut "populate" les valeurs passées dans la page
+            $productData['title'] = $_POST['title'];
+            $productData['description'] = $_POST['description'];
+            // Pour éviter des erreurs on peut préciser le type de données attendues
+            $productData['price'] = (float)$_POST['price'];
+            $productData['imageFile'] = $_FILES['image'] ?? null;
+
+            // Instanciation du model Product
+            $product = new Product();
+            // On lui passe toutes les données récupérées avec la méthode load
+            $product->load($productData);
+            // save() : méthode à créer
+            $errors = $product->save();
+            if (empty($errors)) {
+                header('Location: /products');
+                exit;
+            }  
+        }
+
+        $router->renderView('products/update', [
+            'product' => $productData,
+            'errors' => $errors
+        ]);
     }
 
-    public function delete()
+    public function delete(Router $router)
     {
-        echo "Delete page";
+        $id = $_POST['id'] ?? null;
+        if (!$id) {
+            header('Location: /products');
+            exit;
+        }
+        $router->db->deleteProduct($id);
+        header('Location: /products');
+            exit;
     }
 }

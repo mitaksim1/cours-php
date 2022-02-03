@@ -38,10 +38,10 @@
         <td><?php echo $product['create_date'] ?></td>
         <td>
           <!-- UPDATE -->
-          <a href="update.php?id=<?php echo $product['id'] ?>" class="btn btn-sm btn-outline-primary">Edit</a>
+          <a href="/products/update?id=<?php echo $product['id'] ?>" class="btn btn-sm btn-outline-primary">Edit</a>
           <!-- DELETE -->
           <!-- Pour supprimer un produit de la bdd , c'est mieux d'utiliser la méthode POST, alors on change le bouton de <a> à <buuton> -->
-          <form style="display: inline-block;" action="delete.php" method="post">
+          <form style="display: inline-block;" action="/products/delete" method="post">
             <!-- On récupère l'id avec un input du type hidden -->
             <input type="hidden" name="id" value="<?php echo $product['id'] ?>">
             <button type="submit" class="btn btn-sm btn-outline-danger">Delete</button>

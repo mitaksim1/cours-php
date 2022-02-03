@@ -54,6 +54,7 @@ class Product
             }
             // Connexion à la bdd
             $db = Database::$db;
+            
             if ($this->id) {
                 $db->updateProduct($this);
             } else {
