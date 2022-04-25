@@ -34,7 +34,11 @@ class Router
     public function resolve()
     {
         // S'il n'y aucun chemin dans la clé PATH_INFO, afficher route /
-        $currentUrl = $_SERVER['PATH_INFO'] ?? '/';
+        $currentUrl = $_SERVER['REQUEST_URI'] ?? '/';
+        if (strpos($currentUrl, '?') !== false) {
+            $currentUrl = substr($currentUrl, 0, strpos($currentUrl, '?'));
+        }
+        
         // On doit savoir quelle méthode a été utilisée
         $method = $_SERVER['REQUEST_METHOD'];
 

@@ -1,6 +1,4 @@
 <!-- FORM -->
-
-
     <!-- Message d'erreur si donnée manquante  -->
     <?php if (!empty($errors)): ?>
         <div class="alert alert-danger">
